@@ -1,37 +1,26 @@
-# Antes de empezar
+# Setup — hazlo antes de la sesión 1
 
-Quince minutos, y se hace **una sola vez** para toda la parte 2.
+Buenas noticias: **tu laptop casi no necesita nada.**
+
+No vas a instalar Python, ni Node, ni Docker. Todo eso vive en una máquina Ubuntu en la nube
+que vas a crear en la primera sesión. Tu computadora sólo sirve para escribir código y
+empujarlo a GitHub.
+
+```
+   Tu laptop              GitHub              Tu instancia EC2
+   ─────────────          ──────              ────────────────
+   VS Code + git   ─push──▶  tu fork  ─pull──▶  Ubuntu
+   escribir                                     ahí corre todo
+                                     ◀── terminal desde el navegador
+```
+
+Eso significa que da exactamente igual si usas Windows o Mac. Es a propósito.
+
+Esto toma unos 15 minutos.
 
 ---
 
-## Cómo se trabaja en esta parte
-
-En la parte 1 cada quien hizo un *fork*. Aquí no. El fork ata tu repositorio al del curso, y
-cuando algo se desincroniza —que pasa— arreglarlo es complicado justo cuando menos tiempo
-tienes.
-
-Esta vez tu repositorio es **tuyo, desde cero**:
-
-```
-   Repo del curso            Tu repositorio             Tu instancia
-   ──────────────            ──────────────             ────────────
-   lo bajas una vez  ──▶  escribes en VS Code  ──push──▶  lo clonas
-   (guías y esqueleto)         y haces push              y lo pruebas
-```
-
-Tres cosas que esto cambia respecto a la parte 1:
-
-| | |
-|---|---|
-| **No hay fork** | Tu repositorio no depende del mío. Nada se desincroniza |
-| **Tu repositorio es público** | Para que la instancia pueda clonarlo sin contraseñas ni tokens |
-| **La instancia clona el tuyo** | No el del curso. Ahí pruebas lo que escribiste |
-
----
-
-## 1. En tu computadora
-
-Tres cosas, y **nada más**:
+## 1. En tu laptop
 
 | Qué | Dónde | Para qué |
 | --- | ----- | -------- |
@@ -39,216 +28,161 @@ Tres cosas, y **nada más**:
 | **VS Code** | [code.visualstudio.com](https://code.visualstudio.com/) | escribir el código |
 | **Cuenta de GitHub** | [github.com](https://github.com/) | donde vive tu repositorio |
 
+En macOS, `git` también llega con `xcode-select --install`.
+
+Configura tu identidad de git una sola vez:
+
 ```bash
 git config --global user.name "Tu Nombre"
 git config --global user.email "tu-correo@tec.mx"
 ```
 
-### Lo que NO instalas en tu computadora
+---
 
-**Python. Node. Ollama. Ninguno.**
+## 1b. Si usas Windows: pon Git Bash como terminal de VS Code
 
-Tu máquina escribe el código; la instancia lo ejecuta. Es lo mismo de la parte 1 y aquí
-importa aún más, porque Ollama y el modelo son un gigabyte que solo tiene sentido donde corre
-el producto.
+**Este paso no es opcional y toma dos minutos.** Sáltatelo y la mitad de los comandos del
+curso te van a fallar.
 
-Da exactamente igual si usas Windows, Mac o Linux: lo que se ejecuta corre en Ubuntu, igual
-para todos. Esa es media razón de que el curso funcione con 30 laptops distintas.
+VS Code en Windows abre **PowerShell**, y los comandos de este curso están escritos para
+`bash` — el mismo intérprete que usan macOS, Linux y tu instancia EC2.
 
-> Si ya tienes Python o Node instalados, no estorban — pero no los vamos a usar. Y si intentas
-> correr `./run start` o `bash setup/bootstrap.sh` en tu computadora, los dos te van a decir
-> que ese no es su sitio, en vez de fallar con un error críptico.
-
-**Por ahora.** Al final del módulo vas a tener que hacer correr todo esto en tu propia
-máquina, y va a ser un ejercicio, no un paso del setup: no habrá un script que lo haga por ti.
-Para entonces vas a saber exactamente qué necesita el producto para funcionar — y averiguar
-cómo instalarlo en *tu* sistema es justo la prueba de que lo entendiste.
-
-### Si usas Windows: Git Bash como terminal de VS Code
-
-**No es opcional.** VS Code en Windows abre PowerShell, y los comandos de este curso están
-escritos para `bash`. En PowerShell, `./run start` falla así:
+En PowerShell, `./setup/run` falla así:
 
 ```
 Error al ejecutar el programa 'run': La operación que se ha intentado no está permitida
 ```
 
-Ya tienes bash: viene con Git for Windows. Solo hay que decirle a VS Code que lo use.
+Es el comando con el que arrancas los servidores, traes el material de cada sesión y reparas
+tu repositorio. Sin bash, no tienes ninguno de los tres.
 
-1. `Ctrl+Shift+P` → **Terminal: Select Default Profile** → **Git Bash**
-2. Cierra la terminal abierta y abre una nueva
+La buena noticia: **ya tienes bash**. El instalador de Git para Windows incluye **Git Bash**.
+Solo hay que decirle a VS Code que lo use.
 
-Compruébalo con `echo $SHELL`: tiene que terminar en `bash`.
+1. Abre VS Code.
+2. `Ctrl+Shift+P` → escribe **Terminal: Select Default Profile**.
+3. Elige **Git Bash**.
+4. Cierra la terminal que tengas abierta (el icono del bote de basura) y abre una nueva con
+   `` Ctrl+Ñ `` (o **Terminal → New Terminal**).
 
----
-
-## 2. Crea tu repositorio
-
-En GitHub, **New repository**:
-
-- Nombre: el que quieras. `TC3009-Part2` está bien.
-- **Público.** No es un detalle: tu instancia lo va a clonar, y no tiene credenciales de
-  GitHub. Un repositorio privado le pediría usuario y contraseña, y se quedaría colgado.
-- **Sin** README, sin `.gitignore`, sin licencia. Vacío del todo.
-
-Copia su URL. La vas a usar en el siguiente paso.
-
-> **¿Y si no quiero que mi código sea público?** Entonces tendrías que generar un token de
-> acceso personal y pegarlo en la instancia — una credencial tuya viviendo en una máquina
-> compartida y desechable. Para este curso no vale la pena. Tu código no tiene secretos: las
-> claves y las direcciones salen de variables de entorno, nunca del repositorio.
-
----
-
-## 3. Baja el contenido del curso
-
-Hay dos formas. **La primera es mejor** y solo tiene una línea más.
-
-### Opción A — clonar y reapuntar (recomendada)
+Compruébalo. En la terminal nueva:
 
 ```bash
-git clone https://github.com/vsosahdz/TC3009-Part2-2026.git
-cd TC3009-Part2-2026
-
-git remote rename origin curso
-git remote add origin https://github.com/TU-USUARIO/TU-REPO.git
-git push -u origin main
+echo $SHELL
 ```
 
-Cuatro comandos, y te dejan con lo mejor de los dos mundos: tu repositorio es tuyo, y
-`curso` sigue ahí para traer correcciones sin depender de nada.
+Tiene que responder algo que termine en `bash`. Si no dice nada, o dice algo con
+`powershell`, todavía estás en PowerShell y los comandos te van a fallar.
 
-Compruébalo:
+A partir de ahí, **los comandos del curso son idénticos en Windows y en Mac**. No hay una
+versión para cada uno, y eso es a propósito: con dos juegos de instrucciones, la mitad de la
+clase acaba corriendo la que no era.
 
-```bash
-git remote -v
-```
-
-```
-curso    https://github.com/vsosahdz/TC3009-Part2-2026.git (fetch)
-origin   https://github.com/TU-USUARIO/TU-REPO.git (push)
-```
-
-### Opción B — el ZIP
-
-Si te perdiste con lo anterior: en la página del repo del curso, **Code → Download ZIP**.
-Descomprime, entra a la carpeta, y:
-
-```bash
-git init
-git add -A
-git commit -m "material del curso"
-git branch -M main
-git remote add origin https://github.com/TU-USUARIO/TU-REPO.git
-git push -u origin main
-```
-
-Funciona igual, con una diferencia que se nota más adelante: **no tienes el remoto `curso`**,
-así que si publico una corrección tienes que agregarlo a mano para traerla:
-
-```bash
-git remote add curso https://github.com/vsosahdz/TC3009-Part2-2026.git
-```
-
----
-
-## 4. Tu instancia
-
-La misma t2.large de siempre. Si la tienes de la parte 1, sáltate crearla.
-
-**En la instancia**, clona **tu** repositorio —no el del curso— y aprovisiona:
-
-```bash
-cd ~
-git clone https://github.com/TU-USUARIO/TU-REPO.git
-cd TU-REPO
-bash setup/bootstrap.sh
-```
-
-Una instancia recién creada **no trae nada**: ni Python, ni Node, ni Ollama. El bootstrap
-instala las cinco capas y comprueba cada una antes de seguir:
-
-```
-  0 · espacio en disco        avisa si no caben los ~2.5 GB que vienen
-  1 · paquetes del sistema    python3, python3-venv, git, curl, lsof
-  2 · entorno virtual         .venv/ dentro del proyecto
-  3 · dependencias Python     Flask, CORS, requests
-  4 · Node y el frontend      Node 24 (LTS) con nvm, y npm ci
-  5 · Ollama y el modelo      el servidor y ~1 GB de pesos
-```
-
-Termina con una comprobación de las cuatro, y si algo quedó a medias lo dice y puedes volver
-a correrlo: no reinstala lo que ya está.
-
-**La descarga del modelo es de ~1 GB**, así que hazlo antes de la clase, no durante.
-
-> **Por qué un entorno virtual y no `pip install` a secas.** Ubuntu 24.04 protege el Python
-> del sistema: un `pip install` fuera de un entorno se niega con
-> `externally-managed-environment`. No es un estorbo, es correcto — las dependencias de tu
-> proyecto no deben mezclarse con las del sistema operativo. Por eso todo vive en `.venv/`, y
-> por eso `./run` llama a `.venv/bin/python` directamente en vez de pedirte que actives nada.
-> Una activación olvidada es una fuente de confusión menos.
+> **Un detalle que ya está resuelto.** El instalador de Git para Windows trae
+> `core.autocrlf=true`, que convierte los archivos a finales de línea de Windows al clonar.
+> Git Bash los tolera, pero otras herramientas no, y en algunos sistemas el síntoma es un
+> mensaje que no explica nada: `env: bash\r: No such file or directory`.
 >
-> **Si el disco se queda corto**, el volumen por defecto de una instancia nueva son 8 GB y
-> aquí caben justos. El paso 0 te avisa antes de empezar a bajar, no a la mitad.
+> Este repositorio trae un `.gitattributes` que fuerza finales de línea de Unix, así que
+> **no tienes que configurar nada**. Si ves ese mensaje en otro proyecto, ya sabes qué es.
 
-Luego:
+---
+
+## 2. Haz fork del repositorio
+
+Entra a **<https://github.com/vsosahdz/TC3009-Part1-2026>** y presiona **Fork**.
+
+Eso te crea tu propia copia. Vas a trabajar sobre ella toda la concentración, y es la que
+vas a clonar en tu instancia.
+
+Déjala **pública**: en la sesión 1 la vas a clonar desde una máquina en la nube que no tiene
+tus credenciales de GitHub.
+
+Ahora clónala en tu laptop y ábrela en VS Code:
 
 ```bash
-./run start
-./run salud
+git clone https://github.com/TU-USUARIO/TC3009-Part1-2026.git
+cd TC3009-Part1-2026
+code .
 ```
 
 ---
 
-## El ciclo de trabajo
+## 3. Verifica que todo está en su lugar
 
-Es el mismo de la parte 1, cambiando de dónde clona la instancia:
+Marca las cuatro casillas antes de llegar a clase:
 
-```
-   1. Editas en VS Code, en tu computadora
-   2. git add -A && git commit -m "..." && git push
-   3. En la instancia:  git pull && ./run restart
-```
+- [ ] `git --version` responde algo
+- [ ] `git config --global user.name` muestra tu nombre
+- [ ] Hiciste fork y lo clonaste; VS Code abre la carpeta y ves `README.md`
+- [ ] `git tag` muestra `s1`, `s2`, `s3` y `s4`
+- [ ] **En Windows:** `echo $SHELL` en la terminal de VS Code termina en `bash`
 
-**Nunca edites en la instancia.** Lo que escribas ahí lo pisa el siguiente `git pull`, y no
-está en tu repositorio, así que no cuenta como entregado.
+La última es la que más gente omite y la que más caro sale. Si en Windows te responde vacío o
+algo con `powershell`, vuelve al paso 1b: no es un detalle cosmético, es que los comandos del
+curso no van a correr.
+
+Si `git tag` no muestra los cuatro, avisa antes de la sesión — significa que tu fork se hizo
+antes de tiempo y el mecanismo de recuperación no te va a funcionar.
 
 ---
 
-## 5. Comprueba antes de la clase
+## 4. Confirma que entras al laboratorio de AWS
 
-- [ ] `git --version` responde
-- [ ] Tu repositorio existe en GitHub, es **público**, y tiene el material
-- [ ] `git remote -v` muestra `origin` (el tuyo) y, si usaste la opción A, `curso`
-- [ ] En la instancia: `./run salud` dice algo
-- [ ] En la instancia: `ollama list` muestra tu modelo
-- [ ] **En Windows:** `echo $SHELL` termina en `bash`
+Entra a **AWS Academy Learner Lab**, presiona **Start Lab**, espera el punto verde y abre la
+consola de AWS.
+
+No crees nada todavía — eso es lo primero que hacemos juntos en la sesión 1. Sólo confirma
+que entras y que tienes presupuesto disponible. Si el laboratorio no te abre, resuélvelo
+antes de la clase.
+
+**Presiona End Lab** cuando termines de comprobarlo.
+
+---
+
+## Cómo va a ser el ciclo de trabajo
+
+Vale la pena entenderlo desde ahora, porque es distinto a lo que estás acostumbrado:
+
+```
+   1. Editas en VS Code, en tu laptop
+   2. git add · git commit · git push
+   3. En la terminal de tu instancia:  sync
+   4. Reinicias los servidores y recargas el navegador
+```
+
+Tu código **viaja** hasta donde se ejecuta. No es una molestia del curso: es exactamente lo
+que pasa en cualquier producto real, y es más fácil acostumbrarse ahora que descubrirlo
+después.
 
 ---
 
 ## Problemas comunes
 
-**`Support for password authentication was removed` al hacer push.**
-GitHub no acepta contraseña. Usa un token de acceso personal como contraseña, o configura SSH.
-Se hace una vez.
+**`git` no se reconoce como comando en Windows.**
+Reinstala desde git-scm.com y reinicia la terminal. El instalador agrega git al PATH, pero
+las terminales ya abiertas conservan el PATH viejo.
 
-**La instancia se queda colgada pidiendo `Username for 'https://github.com'`.**
-Tu repositorio es privado. Hazlo público en **Settings → General → Change visibility**.
+**Windows: `Error al ejecutar el programa 'run': La operación que se ha intentado no está permitida`.**
+Estás en PowerShell. Es el error más común del curso en Windows y solo tiene una causa. Ve al
+paso 1b y pon Git Bash como terminal de VS Code.
 
-**`./run` no se reconoce (Windows).**
-Estás en PowerShell. Paso 1, Git Bash.
+**Windows: `env: bash\r: No such file or directory`.**
+Finales de línea de Windows en un script. No debería pasarte —el repositorio trae un
+`.gitattributes` que lo impide— pero si clonaste antes de que existiera, vuelve a clonar:
 
-**`./run start` en mi computadora dice «esto se corre en la INSTANCIA».**
-Correcto, no es un error. Tu máquina no ejecuta nada: edita, hace `commit` y `push`. Lo que
-corre, corre en la instancia.
+```bash
+cd ..
+rm -rf TC3009-Part1-2026
+git clone https://github.com/TU-USUARIO/TC3009-Part1-2026.git
+```
 
-**`bash setup/bootstrap.sh` en mi Mac dice lo mismo.**
-Igual. Ese script instala Ubuntu-cosas con `apt-get`; en tu Mac no tiene nada que hacer.
+**Hice fork pero `git tag` no muestra nada.**
+Un fork se lleva los tags que existían al momento de hacerlo. Si los tuyo no los tiene, el
+repositorio del curso todavía no los tenía cuando forkeaste. Avisa.
 
-**`./run salud` dice que Ollama no responde.**
-En la instancia: `ollama serve &`. Si acabas de reiniciarla, el servicio puede tardar.
+**No tengo cuenta de GitHub con mi correo del Tec.**
+No hace falta que sea el del Tec. Cualquier cuenta sirve.
 
-**El modelo tarda muchísimo.**
-Es una t2.large sin GPU: normal. La guía explica qué hacer con eso — y resulta que la
-respuesta no es «un modelo más rápido».
+**¿No necesito Python de verdad?**
+De verdad. Si ya lo tienes instalado no estorba, pero no lo vamos a usar en tu laptop.

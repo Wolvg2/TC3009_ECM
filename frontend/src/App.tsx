@@ -28,7 +28,7 @@ export default function App() {
   useEffect(() => {
     finRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [mensajes, esperando]);
-  
+
   async function mandar(e: FormEvent) {
     e.preventDefault(); // sin esto el navegador recarga la pagina entera
     const pregunta = texto.trim();
@@ -53,10 +53,6 @@ export default function App() {
     }
   }
 
-  
-
-  
-
   return (
     <div className="pagina">
       <header>
@@ -75,7 +71,7 @@ export default function App() {
           <p className="vacio">Escribe algo abajo para empezar.</p>
         )}
 
-        {mensajes.map((m, i) => (
+        {mensajes.map((m: { role: string; content: any; }, i: any) => (
           <div key={i} className={`mensaje ${m.role}`}>
             <span className="quien">{m.role === "user" ? "tú" : "modelo"}</span>
             <div className="texto">{m.content}</div>

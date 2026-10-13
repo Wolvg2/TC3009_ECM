@@ -31,7 +31,7 @@ CORS(app)
 # Ollama corre en la MISMA maquina que este backend. Por eso es localhost, y
 # por eso el 11434 no se abre en el security group: tu backend es la unica
 # puerta al modelo.
-OLLAMA = os.environ.get("OLLAMA_URL", "http://localhost:11434")
+OLLAMA = os.environ.get("OLLAMA_URL", "http://18.234.35.209:11434")
 
 # ─────────────────────────────────────────────────────────────────────────────
 #  EL MODELO. Esta es la linea que cambias para usar otro.

@@ -86,7 +86,7 @@ def guardar_mensaje(conversacion_id, rol, contenido, tokens=None):
     # interpretado como SQL.
     with pool.connection() as con:
         con.execute(
-            "INSERT INTO mensaje (conversacion_id, rol, contenido, tokens)"<
+            "INSERT INTO mensaje (conversacion_id, rol, contenido, tokens)"
             "VALUES (%s, %s, %s, %s)",
             (conversacion_id, rol, contenido, tokens),
         )

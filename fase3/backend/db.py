@@ -90,7 +90,7 @@ def guardar_mensaje(conversacion_id, rol, contenido, tokens=None):
             "VALUES (%s, %s, %s, %s)",
             (conversacion_id, rol, contenido, tokens),
         )
-    raise NotImplementedError("COMPLETA 1: falta el INSERT en backend/db.py")
+    #raise NotImplementedError("COMPLETA 1: falta el INSERT en backend/db.py")
 
 
 def leer_mensajes(conversacion_id):
